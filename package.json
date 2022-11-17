@@ -1,5 +1,5 @@
 {
-  "name": "toolbelt",
+  "name": "@mv-d/toolbelt",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
