@@ -1,0 +1,2 @@
+ignores: ["eslint", "husky","webpack-cli","@types/jest"]
+skip-missing: true
