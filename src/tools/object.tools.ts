@@ -20,7 +20,7 @@ export function isObjectOf(data: unknown, types: string[]): boolean {
   return objectTypesCheck(data as RecordObject<unknown>, types);
 }
 
-export function mapI<T, K>(data: Optional<T[]>, fn: (item: T, index: number) => K): K[] {
+export function mapI<T, K>(fn: (item: T, index: number) => K, data: Optional<T[]>): K[] {
   if (!data || !Array.isArray(data)) return [];
 
   const sections = [];
