@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { green, red, yellow } from 'colorette';
+import { blue, green, red, yellow } from 'colorette';
 import eventsLib from 'events';
 import { path } from 'ramda';
 import { Optional } from '../types';
@@ -10,6 +10,7 @@ import { sortObjectByKey } from './object.tools';
 export enum LogEventTypes {
   ERR = 'error',
   INFO = 'info',
+  INFO_B = 'info_b',
   METRICS = 'metrics',
   WARN = 'warning',
   DIR = 'dir', // for nodejs
@@ -39,12 +40,15 @@ class EventsClass {
     });
 
     this.eventEmitter?.on(LogEventTypes.METRICS, function logInfoPrinter(message: string) {
-      console.log('metrics');
       console.log(green(`[ metrics ] ${JSON.parse(message).join(';')}`));
     });
 
     this.eventEmitter?.on(LogEventTypes.INFO, function logInfoPrinter(message: string) {
       console.log(green(`[ info ] ${JSON.parse(message).join('. ')}`));
+    });
+
+    this.eventEmitter?.on(LogEventTypes.INFO_B, function logInfoPrinter(message: string) {
+      console.log(blue(`[ info ] ${JSON.parse(message).join('. ')}`));
     });
 
     this.eventEmitter?.on(LogEventTypes.WARN, function logWarnPrinter(message: string) {
@@ -125,10 +129,14 @@ function logInfo(...data: (string | number)[]) {
   Events.send({ type: LogEventTypes.INFO, message: JSON.stringify(data) });
 }
 
+function logInfoB(...data: (string | number)[]) {
+  Events.send({ type: LogEventTypes.INFO_B, message: JSON.stringify(data) });
+}
+
 function logWarn(...data: unknown[]) {
   Events.send({ type: LogEventTypes.WARN, message: JSON.stringify(data) });
 }
 
-const logger = { warn: logWarn, info: logInfo, error: logError, log, write, metrics: logMetrics, dir };
+const logger = { warn: logWarn, info: logInfo, infoB: logInfoB, error: logError, log, write, metrics: logMetrics, dir };
 
 export { logger };
