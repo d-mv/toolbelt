@@ -1,22 +1,17 @@
 import { path } from 'ramda';
 
-import { isNilOrEmpty } from './logic.tools';
-import { logger } from './log.tools';
+import { RecordObject } from '../types';
 
-export function setupTxt(textObject: Record<string, unknown>) {
-  return function txt(section: string | string[]) {
-    const sectionToUse = Array.isArray(section) ? section : [section];
+function buildPath(sectionOrPath: string | string[], keyOrPath: string | string[]) {
+  const pathToValue = typeof sectionOrPath === 'string' ? [sectionOrPath] : sectionOrPath;
 
-    const messageSection = path(sectionToUse, textObject) as Record<string, string>;
+  return typeof keyOrPath === 'string' ? [...pathToValue, keyOrPath] : [...pathToValue, ...keyOrPath];
+}
 
-    if (isNilOrEmpty(messageSection)) throw new Error('Missing errors templates');
-
-    return function getMessage(message: string) {
-      const result = path<string>([message], messageSection);
-
-      if (!result) logger.warn(`Missing message at ${sectionToUse.join('/')}/${message}`);
-
-      return result ?? '';
+export function setupText(textData: RecordObject) {
+  return function setSection(sectionOrPath: string | string[]) {
+    return function get(keyOrPath: string | string[]) {
+      return (path(buildPath(sectionOrPath, keyOrPath), textData) as string) ?? '';
     };
   };
 }
