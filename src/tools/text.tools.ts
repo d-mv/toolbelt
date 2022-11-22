@@ -15,3 +15,14 @@ export function setupText(textData: RecordObject) {
     };
   };
 }
+
+export function fromTemplate(template: string, params: (string | number)[]): string {
+  let result = template;
+
+  if (!params) return template;
+
+  params.forEach((param: string | number, key: number) => {
+    result = result.replace(new RegExp(`%${key + 1}`, 'g'), String(param));
+  });
+  return result;
+}
