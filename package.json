@@ -1,6 +1,6 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -19,7 +19,7 @@
     "test:typescript": "tsc --noEmit -p ./tsconfig.json",
     "test:watch:coverage": "NODE_ENV=test jest --coverage --watchAll",
     "test:watch": "NODE_ENV=test TZ='UTC' jest --watchAll --detectOpenHandles",
-    "build": "rm -rf dist && tsc -p ./tsconfig.build.json",
+    "build": "rm -rf dist && tsc -p ./tsconfig.build.json && cp src/logger.js dist/logger.js",
     "dev": "NODE_ENV=development ts-node-dev src/client.ts"
   },
   "keywords": [],
