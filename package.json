@@ -1,6 +1,6 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -65,7 +65,6 @@
     "dayjs": "^1.11.6",
     "deep-equal": "^2.0.5",
     "fast-csv": "^4.3.6",
-    "micromark": "^3.1.0",
     "phone-number-formats": "^2.2.1",
     "ramda": "^0.28.0",
     "rxjs": "^7.5.6",

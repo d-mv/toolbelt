@@ -4,8 +4,6 @@ export { serializeJavascript };
 
 export type { SerializeJSOptions };
 
-export * as micromark from 'micromark';
-
 export * as tinyCase from 'tiny-case';
 
 export * from './tools';
