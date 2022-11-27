@@ -20,8 +20,10 @@ export function duration(start: Dayjs, end: Dayjs): number {
   return end.diff(start, 'days', false);
 }
 
-export function isWeekend(date: Dayjs): boolean {
-  return [5, 6].includes(date.day());
+export function isWeekend(date: Dayjs, fromSunday = false): boolean {
+  if (fromSunday) return [5, 6].includes(date.day());
+
+  return [6, 7].includes(date.day());
 }
 
 export function isBetween(day: Dayjs, start: Dayjs, end: Dayjs) {
