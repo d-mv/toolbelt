@@ -1,6 +1,6 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -55,12 +55,15 @@
   "dependencies": {
     "@types/deep-equal": "^1.0.1",
     "@types/ramda": "^0.28.15",
+    "@types/serialize-javascript": "^5.0.2",
     "@types/uuid": "^8.3.4",
     "axios": "^0.27.2",
     "colorette": "^2.0.19",
     "deep-equal": "^2.0.5",
+    "fast-csv": "^4.3.6",
     "ramda": "^0.28.0",
     "rxjs": "^7.5.6",
+    "serialize-javascript": "^6.0.0",
     "socket.io-client": "^4.5.1",
     "uuid": "^9.0.0"
   },

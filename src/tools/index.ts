@@ -8,9 +8,13 @@ export * from './latency.tools';
 
 export * from './log.tools';
 
+export * from './logic.tools';
+
 export * from './object.tools';
 
 export * from './option.tools';
+
+export * from './parse.tools';
 
 export * from './random.tools';
 
@@ -22,8 +26,8 @@ export * from './store.tools';
 
 export * from './string.tools';
 
+export * from './stringify.tools';
+
 export * from './text.tools';
 
 export * from './type.tools';
-
-export * from './logic.tools';
