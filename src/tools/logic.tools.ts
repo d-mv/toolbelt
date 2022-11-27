@@ -1,22 +1,25 @@
 import { isEmpty, isNil } from 'ramda';
 
+import { Fn } from '../types';
 import { as } from './type.tools';
 
 export const isNilOrEmpty = (data: unknown): boolean => isNil(data) || isEmpty(data);
 
+export type IfTrueFn<T> = T | Fn<T>;
+
 export function ifTrue<T = undefined, K = T>(
   condition: unknown,
-  dataOrFn: (() => T) | T,
-  alternative?: (() => K) | K,
+  dataOrFn: IfTrueFn<T>,
+  alternative?: IfTrueFn<K>,
 ): T | K {
   if (condition) {
-    if (typeof dataOrFn === 'function') return (dataOrFn as () => T)();
+    if (typeof dataOrFn === 'function') return as<Fn<T>>(dataOrFn)();
 
     return dataOrFn;
   }
 
   if (typeof alternative !== 'undefined') {
-    if (typeof alternative === 'function') return (alternative as () => K)();
+    if (typeof alternative === 'function') return as<Fn<K>>(alternative)();
 
     return alternative;
   }

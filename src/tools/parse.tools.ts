@@ -1,7 +1,10 @@
 import { Readable } from 'stream';
 import { parse } from 'fast-csv';
+import PhoneNumberFormatter from 'phone-number-formats';
 
 import { option, Option, OptionCallbacks } from './option.tools';
+import { AnyValue } from '../types';
+import { isStr } from './validators';
 
 type ReturnT<P> = P | string;
 
@@ -54,32 +57,32 @@ export async function parseCsvBuffer<CsvStructure extends Record<string, string>
  * ```typescript
  * const { dir } = console
  *
- * const result = parseString<Date>(serializeJavascript(new Date()))
+ * const result = parseStr<Date>(serializeJavascript(new Date()))
  *
  * dir(result)
  *
- * const negativeResult = parseString('qwerty')
+ * const negativeResult = parseStr('qwerty')
  *
  * dir(negativeResult.isNone && negativeResult.error.message) // get error message
  * dir(negativeResult.isNone && negativeResult.error.cause) // get cause of error
  *
  * // use callbacks
- * parseString<Date>(serializeJavascript(new Date()), {
+ * parseStr<Date>(serializeJavascript(new Date()), {
  *   Some: (v) => log(v),
  *   None: () => log('Error occurred'),
  * })
  *
- * parseString('qwerty', {
+ * parseStr('qwerty', {
  *   Some: (v) => log(v),
  *   None: (e) => log('Error occurred:', e?.message),
  * })
  * ```
  */
-export function parseString<T>(s: string): Option<T>;
+export function parseStr<T>(s: string): Option<T>;
 
-export function parseString<T>(s: string, callbacks: OptionCallbacks<T>): void;
+export function parseStr<T>(s: string, callbacks: OptionCallbacks<T>): void;
 
-export function parseString<T>(s: string, callbacks?: OptionCallbacks<T>): Option<T> | void {
+export function parseStr<T>(s: string, callbacks?: OptionCallbacks<T>): Option<T> | void {
   const withCallbacks = callbacks && 'Some' in callbacks && 'None' in callbacks && (callbacks as OptionCallbacks<T>);
 
   if (!s) {
@@ -103,5 +106,39 @@ export function parseString<T>(s: string, callbacks?: OptionCallbacks<T>): Optio
 
     if (withCallbacks) withCallbacks.None(error);
     else return option(null, error);
+  }
+}
+
+export function parseFl(num: AnyValue): Option<number> {
+  if (typeof num === 'number') return option(num);
+
+  if (typeof num !== 'string') return option(null, new Error('Unable to parse'));
+
+  try {
+    const result = parseFloat(num);
+
+    if (!isNaN(result)) return option(result);
+
+    return option(null, new Error('Unable to parse'));
+  } catch (err) {
+    return option(null, new Error('Unable to parse', { cause: err as Error }));
+  }
+}
+
+export function toPhone(value: unknown): Option<string> {
+  if (!value || !isStr(value)) return option(null, new Error('Value is empty or not a string'));
+
+  const v = String(value).trim();
+
+  const isInternational = v[0] === '+';
+
+  try {
+    let result = new PhoneNumberFormatter(v).format({ type: 'international' }).string ?? '';
+
+    if (!isInternational) result = result.replace('+', '');
+
+    return option(result);
+  } catch (err) {
+    return option(null, new Error('Unable to parse', { cause: err as Error }));
   }
 }
