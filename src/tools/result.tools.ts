@@ -27,3 +27,11 @@ export function resultToString<T>(r: Result<T>): ResultErString<T> {
 }
 
 export type PromisedResult<T = void> = Promise<Result<T>>;
+
+export function success<Payload>(payload: Payload): OK<Payload> {
+  return { isOK: true, isErr: false, payload, isResult: true };
+}
+
+export function failure<E extends Error = Error>(error: E): Err<E> {
+  return { isOK: false, isErr: true, error, isResult: true };
+}
