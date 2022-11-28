@@ -32,6 +32,8 @@ export * from './string.tools';
 
 export * from './stringify.tools';
 
+export * from './match.tools';
+
 export * from './text.tools';
 
 export * from './type.tools';

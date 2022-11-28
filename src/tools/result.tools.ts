@@ -1,37 +1,29 @@
-import { path, pick } from 'ramda';
+export type OK<Payload = never> = { isOK: true; isErr: false; payload: Payload; isResult: true };
 
-export type Ok<Payload = never> = { isOK: true; payload: Payload };
+export type ResultError<E> = { isOK: false; isErr: true; error: E; isResult: true };
 
-export type Err<ErrorType = Error> = { isOK: false; message: string; error: ErrorType };
+export type Err<E extends Error = Error> = ResultError<E>;
 
-export type Result<Payload = never, ErrorType = Error> = Ok<Payload> | Err<ErrorType>;
+export type ErrString = ResultError<string>;
 
-export type ResultWithoutError<Payload = never, ErrorType = Error> = Ok<Payload> | Omit<Err<ErrorType>, 'error'>;
+export type Result<Payload = never, E extends Error = Error> = (OK<Payload> | Err<E>) & { isResult: true };
 
-export function success<Payload>(payload: Payload): Result<Payload> {
-  return { isOK: true, payload };
+export type ResultErString<Payload = never> = OK<Payload> | ErrString;
+
+export interface ResultCallbacks<P = unknown, E extends Error = Error> {
+  OK: (value: P) => void;
+  Err: (error: E) => void;
 }
 
-export function failure(errorOrMessage: string | Error, message?: string): Result {
-  const isMessage = typeof errorOrMessage === 'string';
-
-  let m = isMessage ? errorOrMessage : message ?? '';
-
-  if (!isMessage) {
-    if (!message && 'message' in errorOrMessage) m = path(['message'], errorOrMessage) ?? '';
-
-    if ('data' in errorOrMessage) m = JSON.stringify(path(['data'], errorOrMessage));
-  }
-
-  const error = isMessage ? new Error(m) : errorOrMessage;
-
-  return { isOK: false, message: m, error };
+export interface ResultErStringCallbacks<P = unknown> {
+  OK: (value: P) => void;
+  Err: (error: string) => void;
 }
 
-export function stripError(r: Result): Result | ResultWithoutError {
+export function resultToString<T>(r: Result<T>): ResultErString<T> {
   if (r.isOK) return r;
 
-  return pick(['isOK', 'message'], r);
+  return { isOK: false, isErr: true, error: r.error.message, isResult: true };
 }
 
 export type PromisedResult<T = void> = Promise<Result<T>>;

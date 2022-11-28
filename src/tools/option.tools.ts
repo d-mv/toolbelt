@@ -1,6 +1,6 @@
-export type Some<Payload = unknown> = { isSome: true; isNone: false; payload: Payload };
+export type Some<Payload = unknown> = { isSome: true; isNone: false; payload: Payload; isOption: true };
 
-export type None = { isSome: false; isNone: true; error: Error };
+export type None = { isSome: false; isNone: true; error: Error; isOption: true };
 
 export type Option<Payload = unknown> = None | Some<Payload>;
 
@@ -10,11 +10,11 @@ export interface OptionCallbacks<T> {
 }
 
 export function none(error?: Error): None {
-  return { isSome: false, isNone: true, error: error ?? new Error('Unknown error') };
+  return { isSome: false, isNone: true, error: error ?? new Error('Unknown error'), isOption: true };
 }
 
 export function some<T>(payload: T): Some<T> {
-  return { isSome: true, isNone: false, payload };
+  return { isSome: true, isNone: false, payload, isOption: true };
 }
 
 export function option<Payload = unknown>(payload: unknown, error?: Error): Option<Payload> {
