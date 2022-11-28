@@ -1,5 +1,9 @@
 import serializeJavascript, { SerializeJSOptions } from 'serialize-javascript';
 
+import dayjs, * as DayJS from 'dayjs';
+
+export { dayjs, DayJS };
+
 export { serializeJavascript };
 
 export type { SerializeJSOptions };
