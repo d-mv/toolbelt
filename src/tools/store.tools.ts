@@ -16,23 +16,24 @@ export type Action<StateActions, Payload = void> = Payload extends void
   ? ActionWithoutPayload<StateActions>
   : ActionWithPayload<StateActions, Payload>;
 
-export type ReducerFunction<S, StateActions, Payload = AnyValue> =
+export type ReducerFn<S, StateActions, Payload = AnyValue> =
   | ((state: S, action: ActionWithPayload<StateActions, Payload>) => S)
   | ((state: S, action: ActionWithoutPayload<StateActions>) => S);
 
 export interface CreateStoreOptions {
   label: string;
+  isSilent: boolean;
 }
 
 class Store<S, StateActions> {
   #state: BehaviorSubject<S>;
 
-  #reducerFns: Map<StateActions, ReducerFunction<S, StateActions>>;
+  #reducerFns: Map<StateActions, ReducerFn<S, StateActions>>;
 
   #options: Partial<CreateStoreOptions>;
 
   constructor(
-    reducerFns: Map<StateActions, ReducerFunction<S, StateActions>>,
+    reducerFns: Map<StateActions, ReducerFn<S, StateActions>>,
     initialState: S,
     options?: Partial<CreateStoreOptions>,
   ) {
@@ -42,6 +43,8 @@ class Store<S, StateActions> {
   }
 
   #logger(message: string) {
+    if (this.#options.isSilent) return;
+
     const makeLabel = () => `${this.#options.label} >> `;
 
     logger.info(`${this.#options?.label ? makeLabel() : ''}${message}`);
@@ -95,8 +98,54 @@ class Store<S, StateActions> {
   }
 }
 
+/**
+ * Create reactive store
+ * @param {Map} reducerFns Map object of reducer functions
+ * @param {Object} initialState can be {} for empty or Record<string, unknown> for custom
+ * @param {CreateStoreOptions} [options]
+ * @returns {Store<State,StateActions>} store ready to use
+ * @example
+ * ```typescript
+ *
+ * enum StateActions {
+ *   ADD_ONE = 'add_one',
+ *   RESET_STORE = 'reset_store',
+ * }
+ *
+ * const MAP = new Map<StateActions, ReducerFn<State, StateActions>>();
+ *
+ * MAP.set(StateActions.RESET_STORE, () => ({}));
+ *
+ * MAP.set(StateActions.ADD_ONE, (state: State, action:
+ * ActionWithPayload<StateActions, Flag>) =>
+ *  assoc(action.payload.flagId, action.payload.value, state),
+ * );
+ *
+ * const store = createStore(MAP, {}, { label: 'FLAGS_STORE', isSilent: true });
+ *
+ * // to send whole store on WS connection
+ * store.subscribe(() => socket.emit('flags', store.value));
+ *
+ * // restore from DB on startup
+ * export async function reStore(): PromisedResult<boolean> {
+ *  const storeFromDb = await DbFlag.find({});
+ *
+ *  const newStore = reduce((acc, elem) => append(elem, acc), [] as Flags, storeFromDb);
+ *
+ *  store.dispatch(updateSetOfFlags(newStore));
+ *  return success(true);
+ * }
+ *
+ * // function to wrap getting item from store
+ * export function getFlagByIdController(flagId: string) {
+ *  if (!(flagId in store.value)) return failure('FlagId provided is not available');
+ *
+ *  return success(store.select(flagId));
+ * }
+ * ```
+ */
 export function createStore<S, StateActions>(
-  reducerFns: Map<StateActions, ReducerFunction<S, StateActions>>,
+  reducerFns: Map<StateActions, ReducerFn<S, StateActions>>,
   initialState: S,
   options?: Partial<CreateStoreOptions>,
 ) {

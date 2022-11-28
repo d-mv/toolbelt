@@ -14,6 +14,8 @@ export * from './log.tools';
 
 export * from './logic.tools';
 
+export * from './match.tools';
+
 export * from './object.tools';
 
 export * from './option.tools';
@@ -31,8 +33,6 @@ export * from './store.tools';
 export * from './string.tools';
 
 export * from './stringify.tools';
-
-export * from './match.tools';
 
 export * from './text.tools';
 
