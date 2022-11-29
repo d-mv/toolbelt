@@ -86,3 +86,14 @@ export function makeMatch<T = unknown, K = T>(object: RecordObject<T>, defaultRe
     },
   });
 }
+
+/**
+ * Put single value into array if it's not yet one
+ * @param {Array|unknown} v
+ * @returns {Array}
+ */
+export function toArray<T>(v: T | T[]): T[] {
+  if (Array.isArray(v)) return v;
+
+  return [v];
+}
