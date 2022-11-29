@@ -1,54 +1,54 @@
-import { Readable } from 'stream';
-import { parse } from 'fast-csv';
+// import { Readable } from 'stream';
+// import { parse } from 'fast-csv';
 import PhoneNumberFormatter from 'phone-number-formats';
 
 import { option, Option, OptionCallbacks } from './option.tools';
 import { AnyValue } from '../types';
 import { isStr } from './validators';
 
-type ReturnT<P> = P | string;
+// type ReturnT<P> = P | string;
 
-export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
-  file: Buffer,
-): Promise<Option<CsvStructure[]>>;
+// export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
+//   file: Buffer,
+// ): Promise<Option<CsvStructure[]>>;
 
-export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
-  file: Buffer,
-  key: keyof CsvStructure,
-): Promise<Option<string[]>>;
+// export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
+//   file: Buffer,
+//   key: keyof CsvStructure,
+// ): Promise<Option<string[]>>;
 
-export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
-  file: Buffer,
-  key?: keyof CsvStructure,
-): Promise<Option<ReturnT<CsvStructure>[]>> {
-  try {
-    const parsingUnresolvedPromise = new Promise<ReturnT<CsvStructure>[]>((resolve, reject) => {
-      const items: ReturnT<CsvStructure>[] = [];
+// export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
+//   file: Buffer,
+//   key?: keyof CsvStructure,
+// ): Promise<Option<ReturnT<CsvStructure>[]>> {
+//   try {
+//     const parsingUnresolvedPromise = new Promise<ReturnT<CsvStructure>[]>((resolve, reject) => {
+//       const items: ReturnT<CsvStructure>[] = [];
 
-      Readable.from(file)
-        .pipe(parse<string[], number[]>({ headers: true }))
-        .on('error', error => reject(error))
-        .on('data', (data: CsvStructure) => {
-          if (key) {
-            const value = data[key];
+//       Readable.from(file)
+//         .pipe(parse<string[], number[]>({ headers: true }))
+//         .on('error', error => reject(error))
+//         .on('data', (data: CsvStructure) => {
+//           if (key) {
+//             const value = data[key];
 
-            if (!value) reject(new Error(`Column was not found: ${String(key)}`));
+//             if (!value) reject(new Error(`Column was not found: ${String(key)}`));
 
-            items.push(value);
-          } else items.push(data);
-        })
-        .on('end', () => {
-          resolve(items);
-        });
-    });
+//             items.push(value);
+//           } else items.push(data);
+//         })
+//         .on('end', () => {
+//           resolve(items);
+//         });
+//     });
 
-    const requestedColumn = await parsingUnresolvedPromise;
+//     const requestedColumn = await parsingUnresolvedPromise;
 
-    return option(requestedColumn);
-  } catch (err) {
-    return option(null, err as Error);
-  }
-}
+//     return option(requestedColumn);
+//   } catch (err) {
+//     return option(null, err as Error);
+//   }
+// }
 
 /**
  * Safely parse string to object
