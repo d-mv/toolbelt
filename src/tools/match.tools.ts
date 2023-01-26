@@ -44,7 +44,7 @@ class Match<P, E extends Error, T extends Result<P, E> | ResultErString<P> | Opt
     } else {
       const c = callbacks as OptionCallbacks<P>;
 
-      if (r.isSome) c.Some(r.payload);
+      if (r.isSome) c.Some(r.value);
       else c.None(r.error);
     }
   }

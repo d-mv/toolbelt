@@ -28,7 +28,7 @@ export function formatNum(options?: Partial<Intl.NumberFormatOptions & { suffix:
 
       if (result.isNone) return format(0.0);
 
-      value = result.payload;
+      value = result.value;
     }
 
     return format(value) + (options?.suffix || '');
@@ -59,7 +59,7 @@ export function asCurrency(options?: Partial<Intl.NumberFormatOptions>) {
 
       if (result.isNone) return '';
 
-      value = result.payload;
+      value = result.value;
     }
 
     return format(value);

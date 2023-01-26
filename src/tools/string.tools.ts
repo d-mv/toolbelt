@@ -1,7 +1,3 @@
-import { kebabCase } from 'tiny-case';
-
-import { isStr } from './validators';
-
 export function capitalize(s: string): string {
   const split = s.split('');
 
@@ -21,10 +17,4 @@ export function makePlural(s: string, qty: number, opts?: Partial<MakePluralOpti
   if (opts?.customEnding) return `${s.slice(0, -1)}${opts.customEnding}`;
 
   return `${s}s`;
-}
-
-export function toKebab(s: unknown): string {
-  if (!isStr(s)) return '';
-
-  return kebabCase(s as string);
 }

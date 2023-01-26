@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { blue, green, red, yellow } from 'colorette';
 import eventsLib from 'events';
 import { path } from 'ramda';
 import { Optional } from '../types';
@@ -40,19 +39,19 @@ class EventsClass {
     });
 
     this.eventEmitter?.on(LogEventTypes.METRICS, function logInfoPrinter(message: string) {
-      console.log(green(`[ metrics ] ${JSON.parse(message).join(';')}`));
+      console.log(`[ metrics ] ${JSON.parse(message).join(';')}`);
     });
 
     this.eventEmitter?.on(LogEventTypes.INFO, function logInfoPrinter(message: string) {
-      console.log(green(`[ info ] ${JSON.parse(message).join('. ')}`));
+      console.log(`[ info ] ${JSON.parse(message).join('. ')}`);
     });
 
     this.eventEmitter?.on(LogEventTypes.INFO_B, function logInfoPrinter(message: string) {
-      console.log(blue(`[ info ] ${JSON.parse(message).join('. ')}`));
+      console.log(`[ info ] ${JSON.parse(message).join('. ')}`);
     });
 
     this.eventEmitter?.on(LogEventTypes.WARN, function logWarnPrinter(message: string) {
-      console.log(yellow(`[ warn ] ${JSON.parse(message).join('. ')}`));
+      console.log(`[ warn ] ${JSON.parse(message).join('. ')}`);
     });
 
     this.eventEmitter?.on(LogEventTypes.DIR, function logDirPrinter(data: unknown) {
@@ -63,7 +62,7 @@ class EventsClass {
       const { error, message } = payload;
 
       process.stdout.write('\n');
-      ifTrue(message, console.log(red(`[ error ] ${message || ''}`)));
+      ifTrue(message, console.log(`[ error ] ${message || ''}`));
       console.dir(error);
     });
 

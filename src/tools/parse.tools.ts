@@ -1,54 +1,5 @@
-// import { Readable } from 'stream';
-// import { parse } from 'fast-csv';
-import PhoneNumberFormatter from 'phone-number-formats';
-
 import { option, Option, OptionCallbacks } from './option.tools';
 import { AnyValue } from '../types';
-import { isStr } from './validators';
-
-// type ReturnT<P> = P | string;
-
-// export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
-//   file: Buffer,
-// ): Promise<Option<CsvStructure[]>>;
-
-// export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
-//   file: Buffer,
-//   key: keyof CsvStructure,
-// ): Promise<Option<string[]>>;
-
-// export async function parseCsvBuffer<CsvStructure extends Record<string, string>>(
-//   file: Buffer,
-//   key?: keyof CsvStructure,
-// ): Promise<Option<ReturnT<CsvStructure>[]>> {
-//   try {
-//     const parsingUnresolvedPromise = new Promise<ReturnT<CsvStructure>[]>((resolve, reject) => {
-//       const items: ReturnT<CsvStructure>[] = [];
-
-//       Readable.from(file)
-//         .pipe(parse<string[], number[]>({ headers: true }))
-//         .on('error', error => reject(error))
-//         .on('data', (data: CsvStructure) => {
-//           if (key) {
-//             const value = data[key];
-
-//             if (!value) reject(new Error(`Column was not found: ${String(key)}`));
-
-//             items.push(value);
-//           } else items.push(data);
-//         })
-//         .on('end', () => {
-//           resolve(items);
-//         });
-//     });
-
-//     const requestedColumn = await parsingUnresolvedPromise;
-
-//     return option(requestedColumn);
-//   } catch (err) {
-//     return option(null, err as Error);
-//   }
-// }
 
 /**
  * Safely parse string to object
@@ -120,24 +71,6 @@ export function parseFl(num: AnyValue): Option<number> {
     if (!isNaN(result)) return option(result);
 
     return option(null, new Error('Unable to parse'));
-  } catch (err) {
-    return option(null, new Error('Unable to parse', { cause: err as Error }));
-  }
-}
-
-export function toPhone(value: unknown): Option<string> {
-  if (!value || !isStr(value)) return option(null, new Error('Value is empty or not a string'));
-
-  const v = String(value).trim();
-
-  const isInternational = v[0] === '+';
-
-  try {
-    let result = new PhoneNumberFormatter(v).format({ type: 'international' }).string ?? '';
-
-    if (!isInternational) result = result.replace('+', '');
-
-    return option(result);
   } catch (err) {
     return option(null, new Error('Unable to parse', { cause: err as Error }));
   }
