@@ -28,8 +28,6 @@ export * from './result.tools';
 
 export * from './server_result.tools';
 
-export * from './store.tools';
-
 export * from './string.tools';
 
 export * from './stringify.tools';
