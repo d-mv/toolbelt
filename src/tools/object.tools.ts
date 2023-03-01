@@ -97,3 +97,14 @@ export function toArray<T>(v: T | T[]): T[] {
 
   return [v];
 }
+
+export function iter<T>(obj: T) {
+  return {
+    ...obj,
+    [Symbol.iterator]: function* () {
+      for (const key of Object.keys(obj as Record<keyof T, T[keyof T]>) as (keyof T)[]) {
+        yield [key, obj[key] as T[keyof T]];
+      }
+    },
+  } as T & { [Symbol.iterator]: () => Generator<[keyof T, T[keyof T]], void, unknown> };
+}
