@@ -69,14 +69,14 @@ export function loop<T, K>(data: Optional<T[]>, fn: (item: T, index: number) => 
   return sections;
 }
 
-export function sortObjectByKey(obj: unknown) {
+export function sortObjectByKey<T>(obj: T): T {
   if (!obj || typeof obj !== 'object') return obj;
 
   return Object.keys(obj)
     .sort()
     .reduce((acc, key) => {
       return { ...acc, [key]: (obj as RecordObject)[key] };
-    }, {});
+    }, {}) as T;
 }
 
 export function makeMatch<T = unknown, K = T>(object: RecordObject<T>, defaultReturn: K): RecordObject<T> {
