@@ -16,6 +16,10 @@ export * from './logic.tools';
 
 export * from './match.tools';
 
+export * from './number.tools';
+
+export * from './array.tools';
+
 export * from './object.tools';
 
 export * from './option.tools';
