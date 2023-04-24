@@ -16,6 +16,18 @@ export function setupText(textData: RecordObject) {
   };
 }
 
+export function useText<T extends RecordObject>(textObject: T) {
+  return function useSection(section: keyof typeof textObject) {
+    const sectionObject = textObject[section];
+    return function get(key: keyof typeof sectionObject) {
+      if (!sectionObject) return '';
+      const value = sectionObject[key];
+      return value ?? '';
+    };
+  };
+}
+
+
 export function fromTemplate(template: string, params: (string | number)[]): string {
   let result = template;
 
