@@ -33,13 +33,6 @@ export function success<Payload>(payload: Payload): OK<Payload> {
   return { isOK: true, isErr: false, payload, isResult: true };
 }
 
-export function failureWithId<ErrId extends string, E extends Error = Error>(
-  error: E,
-  errId: ErrId extends '' ? never : ErrId,
-): Err<E> {
-  return { isOK: false, isErr: true, error, isResult: true, errId };
-}
-
-export function failure<E extends Error = Error>(error: E): Err<E> {
-  return { isOK: false, isErr: true, error, isResult: true, errId: nanoid() };
+export function failure<E extends Error = Error>(error: E, errId?: string): Err<E> {
+  return { isOK: false, isErr: true, error, isResult: true, errId: errId || nanoid() };
 }
