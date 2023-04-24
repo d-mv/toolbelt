@@ -1,6 +1,7 @@
+import { nanoid } from 'nanoid';
 export type OK<Payload = never> = { isOK: true; isErr: false; payload: Payload; isResult: true };
 
-export type ResultError<E> = { isOK: false; isErr: true; error: E; isResult: true };
+export type ResultError<E> = { isOK: false; isErr: true; error: E; isResult: true; errId: string };
 
 export type Err<E extends Error = Error> = ResultError<E>;
 
@@ -23,7 +24,7 @@ export interface ResultErStringCallbacks<P = unknown> {
 export function resultToString<T>(r: Result<T>): ResultErString<T> {
   if (r.isOK) return r;
 
-  return { isOK: false, isErr: true, error: r.error.message, isResult: true };
+  return { isOK: false, isErr: true, error: r.error.message, isResult: true, errId: r.errId };
 }
 
 export type PromisedResult<T = void> = Promise<Result<T>>;
@@ -32,6 +33,13 @@ export function success<Payload>(payload: Payload): OK<Payload> {
   return { isOK: true, isErr: false, payload, isResult: true };
 }
 
+export function failureWithId<ErrId extends string, E extends Error = Error>(
+  error: E,
+  errId: ErrId extends '' ? never : ErrId,
+): Err<E> {
+  return { isOK: false, isErr: true, error, isResult: true, errId };
+}
+
 export function failure<E extends Error = Error>(error: E): Err<E> {
-  return { isOK: false, isErr: true, error, isResult: true };
+  return { isOK: false, isErr: true, error, isResult: true, errId: nanoid() };
 }
