@@ -8,25 +8,13 @@ function buildPath(sectionOrPath: string | string[], keyOrPath: string | string[
   return typeof keyOrPath === 'string' ? [...pathToValue, keyOrPath] : [...pathToValue, ...keyOrPath];
 }
 
-export function setupText(textData: RecordObject) {
+export function useText(textData: RecordObject) {
   return function setSection(sectionOrPath: string | string[]) {
     return function get(keyOrPath: string | string[]) {
       return (path(buildPath(sectionOrPath, keyOrPath), textData) as string) ?? '';
     };
   };
 }
-
-export function useText<T extends RecordObject>(textObject: T) {
-  return function useSection(section: keyof typeof textObject) {
-    const sectionObject = textObject[section];
-    return function get(key: keyof typeof sectionObject) {
-      if (!sectionObject) return '';
-      const value = sectionObject[key];
-      return value ?? '';
-    };
-  };
-}
-
 
 export function fromTemplate(template: string, params: (string | number)[]): string {
   let result = template;
