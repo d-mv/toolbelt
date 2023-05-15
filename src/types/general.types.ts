@@ -9,4 +9,4 @@ export type PromisedVoid = Promise<void>;
 
 export type Fn<Return = void> = () => Return;
 
-export type FnWithArg<Argument = unknown, Return = void> = (arg0: Argument) => Return;
+export type SingletonFn<Argument = unknown, Return = void> = (arg0: Argument) => Return;

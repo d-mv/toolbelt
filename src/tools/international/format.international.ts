@@ -1,4 +1,4 @@
-import { parseFl } from '../parse.tools';
+import { parseFl } from '../number.tools';
 import { isStr, isNum } from '../validators';
 
 // 1,234,567.00
@@ -26,9 +26,9 @@ export function formatNum(options?: Partial<Intl.NumberFormatOptions & { suffix:
     if (isString) {
       const result = parseFl(value);
 
-      if (result.isNone) return format(0.0);
+      if (result.isErr()) return format(0.0);
 
-      value = result.value;
+      value = result.unwrap();
     }
 
     return format(value) + (options?.suffix || '');
@@ -57,9 +57,9 @@ export function asCurrency(options?: Partial<Intl.NumberFormatOptions>) {
     if (isString) {
       const result = parseFl(value);
 
-      if (result.isNone) return '';
+      if (result.isErr()) return '';
 
-      value = result.value;
+      value = result.unwrap();
     }
 
     return format(value);

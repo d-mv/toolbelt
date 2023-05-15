@@ -1,3 +1,34 @@
+import { Err, Ok, Result } from '@sniptt/monads/build';
+import serializeJavascript from 'serialize-javascript';
+
+import { as } from './type.tools';
+
+export function parseStr<T>(s: string): Result<T, Error> {
+  try {
+    const result = eval('(' + s + ')') as T;
+
+    if (result !== null && result !== undefined) return Ok(result);
+
+    return Err(new Error('Unknown result'));
+  } catch (err) {
+    return Err(as<Error>(err));
+  }
+}
+
+export function stringify(data: unknown, def?: string): Result<string, Error> {
+  try {
+    const result = serializeJavascript(data, { isJSON: true });
+
+    if (result) return Ok(result);
+
+    if (def) return Ok(def);
+
+    return Err(new Error('Unknown result'));
+  } catch (err) {
+    return Err(as<TypeError>(err));
+  }
+}
+
 export function capitalize(s: string): string {
   const split = s.split('');
 

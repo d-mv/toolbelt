@@ -1,10 +1,13 @@
-import { AnyValue, FnWithArg, Optional } from '../types';
+import { None, Option, Some } from '@sniptt/monads/build';
 
-export const imageEncoder = (file: AnyValue, callback: FnWithArg<Optional<string | ArrayBuffer>>) => {
-  const reader = new FileReader();
+export async function imageEncoder(file: Blob): Promise<Option<string | ArrayBuffer>> {
+  return new Promise(resolve => {
+    const reader = new FileReader();
 
-  reader.readAsDataURL(file);
-  reader.onloadend = () => {
-    callback(reader.result);
-  };
-};
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      if (reader.result) resolve(Some(reader.result));
+      else resolve(None);
+    };
+  });
+}
