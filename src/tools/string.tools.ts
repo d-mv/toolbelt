@@ -1,5 +1,4 @@
 import { Err, Ok, Result } from '@sniptt/monads/build';
-import serializeJavascript from 'serialize-javascript';
 
 import { as } from './type.tools';
 
@@ -17,7 +16,7 @@ export function parseStr<T>(s: string): Result<T, Error> {
 
 export function stringify(data: unknown, def?: string): Result<string, Error> {
   try {
-    const result = serializeJavascript(data, { isJSON: true });
+    const result = JSON.stringify(data);
 
     if (result) return Ok(result);
 
