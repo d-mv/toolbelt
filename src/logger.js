@@ -1,109 +1,88 @@
-function parseJson(message) {
-  try {
-    if (typeof message === 'string') return JSON.parse(message);
+function decodeMessage(m) {
+	if (m === null || m === undefined) return m;
 
-    return message;
-  } catch {
-    return message;
-  }
+	let result = m;
+
+	if (typeof result === "string") {
+		try {
+			result = JSON.parse(result);
+		} catch (e) {}
+	}
+
+	if (typeof result === "object") {
+		const r = {};
+
+		for (const [key, value] of Object.entries(result)) {
+			r[key] = decodeMessage(value);
+		}
+		result = r;
+	}
+
+	return result;
 }
 
-function splitJoin(message) {
-  const split = message.split(';');
-
-  if (split.length < 2) return message;
-
-  return split.join(' | ');
-}
-
-function parseMessage(message) {
-  let maybeJson = parseJson(message);
-
-  if (Array.isArray(maybeJson)) return maybeJson.map(splitJoin).join(' | ');
-
-  if (typeof maybeJson === 'object') return message;
-
-  return splitJoin(message);
-}
-
-function stateUpdate(message) {
-  const { groupCollapsed, groupEnd, log, info } = console;
-
-  const [, state, action, nextState] = message;
-
-  groupCollapsed('%c[ACTION]', 'background-color: lemonchiffon;padding: 2px 8px', action.type);
-  log('%c[previous state]', 'color:green', state);
-  info('%c[action]', 'color:blue;font-style: italic', action);
-  log('%c[next state]', 'color:green', nextState);
-  groupEnd();
-}
-
-function decodeMessage(detail) {
-  let d = detail;
-
-  if (typeof d === 'string') d = JSON.parse(detail);
-
-  let message = d.message;
-
-  if (typeof message === 'string') message = parseMessage(d.message);
-
-  return { type: d.type, message };
-}
-
-const LOGGER = {
-  // eslint-disable-next-line no-console
-  log: message => console.log(message),
-  dir: message => {
-    if (message[0] === 'state updated') stateUpdate(message);
-    // eslint-disable-next-line no-console
-    else console.dir(message);
-  },
-  info_b: message =>
-    // eslint-disable-next-line no-console
-    console.log(`%c[INFO] ${message}`, 'background-color:#d7e464;color:#444;padding:3px 8px;border-radius: 3px;'),
-  info: message =>
-    // eslint-disable-next-line no-console
-    console.log(`%c[INFO] ${message}`, 'background-color:#d7e464;color:#444;padding:3px 8px;border-radius: 3px;'),
-  metrics: message =>
-    // eslint-disable-next-line no-console
-    console.log(`%c[METRICS] ${message}`, 'background-color:#cce8f9;color:#444;padding:3px 8px;border-radius: 3px;'),
-  warning: message =>
-    // eslint-disable-next-line no-console
-    console.log(`%c[WARN] ${message}`, 'background-color:#fec67c;color:#444;padding:3px 8px;border-radius: 3px;'),
-  error: message => {
-    if (typeof message === 'object') {
-      let mess = 'message' in message ? ' ' + message['message'] : '';
-
-      if ('traceId' in message) mess = mess + ' ' + message['traceId'];
-
-      // eslint-disable-next-line no-console
-      console.log(
-        `%c[ERROR]${mess}`,
-        'background-color:#e5130e;color:#444;padding:3px 8px;border-radius: 3px;',
-        message,
-      );
-    }
-    // eslint-disable-next-line no-console
-    else console.log(`%c[ERROR] ${message}`, 'background-color:#e5130e;color:#444;padding:3px 8px;border-radius: 3px;');
-  },
-};
+const LOG = new Proxy(
+	{
+		text: (message) => {},
+		metrics: (message) => {
+			console.groupCollapsed(
+				`%cMETRICS::${message.name}`,
+				"background-color:#cce8f9;color:#444;padding:2px 8px;border-radius: 1px;",
+			);
+			console.log(message);
+			console.groupEnd();
+		},
+		api: (message) => {
+			console.groupCollapsed(
+				`%cAPI::${message.origin}`,
+				"background-color:#cce8f9;color:#444;padding:2px 8px;border-radius: 1px;",
+			);
+			console.log(message);
+			console.groupEnd();
+		},
+		info: (message) => {
+			console.log(
+				`%cINFO::${message}`,
+				"background-color:#59fe454f;color:#444;padding:2px 8px;border-radius: 1px;",
+			);
+		},
+		state_change: ({ stateName, currVal, newVal }) => {
+			console.groupCollapsed(
+				`%cSTATE_CHANGE::${stateName}`,
+				"background-color:#243aa838;color:#243aa8;padding:2px 8px;border-radius: 1px;",
+			);
+			console.log("CURRENT:", currVal);
+			console.log("NEW:", newVal);
+			console.groupEnd();
+		},
+	},
+	{
+		get: (target, prop) => {
+			if (prop in target) return target[prop];
+			return (message) => console.log(message);
+		},
+	},
+);
 
 function logMessage(detail) {
-  let { type, message } = decodeMessage(detail);
-  // eslint-disable-next-line security/detect-object-injection
-  LOGGER[type](message);
+	const { type, message } = decodeMessage(detail);
+	LOG[type](message);
 }
 
 function logger(enable = true) {
-  if (enable) {
-    globalThis.document.addEventListener('log', data => logMessage(data.detail));
-    globalThis.console.log('Logging enabled');
-  } else {
-    globalThis.document.removeEventListener('log', data => logMessage(data.detail));
-    // eslint-disable-next-line no-console
-    console.log('Logging disabled');
-  }
+	if (enable) {
+		globalThis.document.addEventListener("log", (data) =>
+			logMessage(data.detail),
+		);
+		globalThis.console.log("Logging enabled");
+	} else {
+		globalThis.document.removeEventListener("log", (data) =>
+			logMessage(data.detail),
+		);
+		// eslint-disable-next-line no-console
+		console.log("Logging disabled");
+	}
 }
 
-globalThis.window['logger'] = logger;
+globalThis.window.logger = logger;
 globalThis.window.logger();
