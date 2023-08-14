@@ -23,7 +23,6 @@ function decodeMessage(m) {
 
 const LOG = new Proxy(
 	{
-		text: (message) => {},
 		metrics: (message) => {
 			console.groupCollapsed(
 				`%cMETRICS::${message.name}`,
@@ -42,8 +41,16 @@ const LOG = new Proxy(
 		},
 		info: (message) => {
 			console.log(
-				`%cINFO::${message}`,
+				`%cINFO::${"Invalid config data"}`,
 				"background-color:#59fe454f;color:#444;padding:2px 8px;border-radius: 1px;",
+			);
+		},
+		error: (message) => {
+			console.log(
+				`%cERROR::${
+					typeof message === "string" ? message : JSON.stringify(message)
+				}`,
+				"background-color:#e80000;color:#fff;padding:2px 8px;border-radius: 1px;",
 			);
 		},
 		state_change: ({ stateName, currVal, newVal }) => {
