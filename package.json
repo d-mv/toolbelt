@@ -1,15 +1,13 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/d-mv/toolbelt.git"
   },
-  "files": [
-    "dist/*"
-  ],
+  "files": ["dist/*"],
   "scripts": {
     "lint": "eslint --ext .ts,.tsx src",
     "test:ci": "CI=true NODE_ENV=test TZ='UTC' jest --config ./jest.config.js --passWithNoTests",
