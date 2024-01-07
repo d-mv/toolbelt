@@ -132,7 +132,7 @@ function logInfoB(...data: (string | number)[]) {
   Events.send({ type: LogEventTypes.INFO_B, message: JSON.stringify(data) });
 }
 
-function logWarn(...data: unknown[]) {
+function logWarn(data: unknown) {
   Events.send({ type: LogEventTypes.WARN, message: JSON.stringify(data) });
 }
 

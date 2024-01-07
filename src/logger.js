@@ -46,6 +46,12 @@ const LOG = new Proxy(
     info: message => {
       console.log(`%cINFO::${message}`, 'background-color:#59fe454f;color:#444;padding:2px 8px;border-radius: 1px;');
     },
+    warning: message => {
+      console.log(
+        `%cWARN::${typeof message === 'string' ? message : JSON.stringify(message)}`,
+        'background-color:#f9f542;color:#444;padding:2px 8px;border-radius: 1px;',
+      );
+    },
     error: message => {
       console.log(
         `%cERROR::${typeof message === 'string' ? message : JSON.stringify(message)}`,
@@ -74,6 +80,8 @@ const LOG = new Proxy(
 function logMessage(detail) {
   const { type, message } = decodeMessage(detail);
 
+  // eslint-disable-next-line no-console
+  // console.log("logMessage", type, message);
   LOG[type](message);
 }
 
