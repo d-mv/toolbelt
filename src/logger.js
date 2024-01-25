@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-function decodeMessage(m) {
+function d(m) {
   if (m === null || m === undefined) return m;
 
   let result = m;
@@ -8,81 +7,27 @@ function decodeMessage(m) {
     try {
       result = JSON.parse(result);
     } catch (e) {
-      // ignore
+      // eslint-disable-next-line no-console -- required
+      console.error('Error parsing message', m);
     }
-  }
-
-  if (typeof result === 'object') {
-    const r = {};
-
-    for (const [key, value] of Object.entries(result)) {
-      r[key] = decodeMessage(value);
-    }
-
-    result = r;
   }
 
   return result;
 }
 
-const LOG = new Proxy(
-  {
-    metrics: message => {
-      console.groupCollapsed(
-        `%cMETRICS::${message.name}`,
-        'background-color:#cce8f9;color:#444;padding:2px 8px;border-radius: 1px;',
-      );
-      console.log(message);
-      console.groupEnd();
-    },
-    api: message => {
-      console.groupCollapsed(
-        `%cAPI::${message.origin}`,
-        'background-color:#cce8f9;color:#444;padding:2px 8px;border-radius: 1px;',
-      );
-      console.log(message);
-      console.groupEnd();
-    },
-    info: message => {
-      console.log(`%cINFO::${message}`, 'background-color:#59fe454f;color:#444;padding:2px 8px;border-radius: 1px;');
-    },
-    warning: message => {
-      console.log(
-        `%cWARN::${typeof message === 'string' ? message : JSON.stringify(message)}`,
-        'background-color:#f9f542;color:#444;padding:2px 8px;border-radius: 1px;',
-      );
-    },
-    error: message => {
-      console.log(
-        `%cERROR::${typeof message === 'string' ? message : JSON.stringify(message)}`,
-        'background-color:#e80000;color:#fff;padding:2px 8px;border-radius: 1px;',
-      );
-    },
-    state_change: ({ stateName, currVal, newVal }) => {
-      console.groupCollapsed(
-        `%cSTATE_CHANGE::${stateName}`,
-        'background-color:#243aa838;color:#243aa8;padding:2px 8px;border-radius: 1px;',
-      );
-      console.log('CURRENT:', currVal);
-      console.log('NEW:', newVal);
-      console.groupEnd();
-    },
-  },
-  {
-    get: (target, prop) => {
-      if (prop in target) return target[prop];
-
-      return message => console.log(message);
-    },
-  },
-);
-
 function logMessage(detail) {
-  const { type, message } = decodeMessage(detail);
+  const m = d(detail);
 
-  // eslint-disable-next-line no-console
-  // console.log("logMessage", type, message);
-  LOG[type](message);
+  if (m.area) {
+    const { area, ...data } = m;
+
+    if (Object.keys(data).length === 1 && data.message) {
+      // eslint-disable-next-line no-console -- required
+      console.log(area, '>>', data.message);
+    }
+    // eslint-disable-next-line no-console -- required
+    else console.log(area, '>>', data);
+  }
 }
 
 function logger(enable = true) {
@@ -91,6 +36,7 @@ function logger(enable = true) {
     globalThis.console.log('Logging enabled');
   } else {
     globalThis.document.removeEventListener('log', data => logMessage(data.detail));
+    // eslint-disable-next-line no-console -- required
     console.log('Logging disabled');
   }
 }
