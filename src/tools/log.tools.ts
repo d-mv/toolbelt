@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import eventsLib from 'events';
-import { path } from 'ramda';
-import { Optional } from '../types';
+import { path } from 'lodash/fp';
 
+import { Optional } from '../types';
 import { ifTrue } from './logic.tools';
 import { sortObjectByKey } from './object.tools';
 

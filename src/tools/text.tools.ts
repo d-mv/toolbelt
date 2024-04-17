@@ -1,4 +1,4 @@
-import { path } from 'ramda';
+import { path } from 'lodash/fp';
 
 import { RecordObject } from '../types';
 

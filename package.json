@@ -1,6 +1,6 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -40,7 +40,6 @@
     "eslint-plugin-markdown": "3.0.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-promise": "6.1.1",
-    "eslint-plugin-ramda": "2.5.1",
     "husky": "8.0.3",
     "jest": "29.5.0",
     "jest-watch-typeahead": "2.2.2",
@@ -52,9 +51,9 @@
   },
   "dependencies": {
     "@sniptt/monads": "0.5.10",
-    "@types/ramda": "0.29.1",
-    "nanoid": "^3.3.6",
-    "ramda": "0.29.0"
+    "@types/lodash": "^4.17.0",
+    "lodash": "^4.17.21",
+    "nanoid": "^3.3.6"
   },
   "bugs": {
     "url": "https://github.com/d-mv/toolbelt/issues"

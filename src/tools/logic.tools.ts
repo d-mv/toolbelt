@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from 'ramda';
+import { isEmpty, isNil } from 'lodash';
 
 import { Fn } from '../types';
 import { as } from './type.tools';

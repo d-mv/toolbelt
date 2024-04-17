@@ -1,4 +1,4 @@
-import { hasPath, path } from 'ramda';
+import { path } from 'lodash/fp';
 
 type EnvReturn = { value: string | undefined; expect: (message?: string) => string };
 
@@ -14,7 +14,7 @@ type EnvReturn = { value: string | undefined; expect: (message?: string) => stri
 export function env(key: string): EnvReturn {
   function expect(message?: string) {
     // if no key
-    if (!hasPath([key], process.env)) throw new Error(message ?? `Missing env key ${key}`);
+    if (!(key in process.env)) throw new Error(message ?? `Missing env key ${key}`);
 
     const value = String(path([key], process.env));
 
