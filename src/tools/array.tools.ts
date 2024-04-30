@@ -25,3 +25,14 @@ export function buildArrayWith<T>(length: number, fn: () => T): T[] {
 
   return result;
 }
+
+/**
+ * Add an element between each element of an array
+ * Taken from https://stackoverflow.com/questions/31879576/what-is-the-most-elegant-way-to-insert-objects-between-array-elements
+ * @param {Array} arr - array to interleave
+ * @param {T} el - element to add between each element of the array
+ * @returns array with the element added between each element of the original array
+ */
+export function interleave<T>(arr: T[], el: T) {
+  return ([] as T[]).concat(...arr.map(n => [n, el])).slice(0, -1);
+}
