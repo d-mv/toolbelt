@@ -7,8 +7,7 @@ function d(m) {
     try {
       result = JSON.parse(result);
     } catch (e) {
-      // eslint-disable-next-line no-console -- required
-      console.error('Error parsing message', m);
+      console.error('Error parsing message', m)
     }
   }
 
@@ -18,26 +17,26 @@ function d(m) {
 function logMessage(detail) {
   const m = d(detail);
 
-  if (m.area) {
-    const { area, ...data } = m;
+  const { area, type, ...data } = m;
 
-    if (Object.keys(data).length === 1 && data.message) {
-      // eslint-disable-next-line no-console -- required
-      console.log(area, '>>', data.message);
-    }
-    // eslint-disable-next-line no-console -- required
-    else console.log(area, '>>', data);
-  }
+  let l = console.log;
+
+  if (m.type) l = console[type];
+
+  const message = Object.keys(data).length === 1 && data.message ? data.message : data;
+
+  if (area) l(area, '>>', message)
+  else l('>>', message)
 }
 
 function logger(enable = true) {
   if (enable) {
-    globalThis.document.addEventListener('log', data => logMessage(data.detail));
-    globalThis.console.log('Logging enabled');
+    globalThis.document.addEventListener('log', (data) => logMessage(data.detail))
+    globalThis.console.log('Logging enabled')
   } else {
-    globalThis.document.removeEventListener('log', data => logMessage(data.detail));
+    globalThis.document.removeEventListener('log', (data) => logMessage(data.detail))
     // eslint-disable-next-line no-console -- required
-    console.log('Logging disabled');
+    console.log('Logging disabled')
   }
 }
 
