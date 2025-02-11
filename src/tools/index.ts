@@ -23,3 +23,5 @@ export * from './text.tools';
 export * from './type.tools';
 
 export * from './validators';
+
+export * from './safeObject.tools';

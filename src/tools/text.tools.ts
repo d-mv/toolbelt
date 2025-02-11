@@ -1,6 +1,5 @@
-import { path } from 'lodash/fp';
-
-import { RecordObject } from '../types';
+import { path } from 'ramda';
+import type { RecordObject } from '../types';
 
 function buildPath(sectionOrPath: string | string[], keyOrPath: string | string[]) {
   const pathToValue = typeof sectionOrPath === 'string' ? [sectionOrPath] : sectionOrPath;

@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
-import eventsLib from 'events';
-import { path } from 'lodash/fp';
-
-import { Optional } from '../types';
+import eventsLib from 'node:events';
+import { path } from 'ramda';
+import type { Optional } from '../types';
 import { ifTrue } from './logic.tools';
 import { sortObjectByKey } from './object.tools';
 
@@ -75,7 +74,9 @@ class EventsClass {
   }
 
   webEvent(detail: LogDetail) {
-    const event = new CustomEvent('log', { detail: JSON.stringify(sortObjectByKey(detail)) });
+    const event = new CustomEvent('log', {
+      detail: JSON.stringify(sortObjectByKey(detail)),
+    });
 
     document.dispatchEvent(event);
   }
@@ -121,7 +122,10 @@ function logError(error: unknown, message?: string) {
 
   Events.isWeb
     ? Events.send({ type: LogEventTypes.ERR, message: messageToSend })
-    : Events.send({ type: LogEventTypes.ERR, message: { error, message: messageToSend } });
+    : Events.send({
+        type: LogEventTypes.ERR,
+        message: { error, message: messageToSend },
+      });
 }
 
 function logInfo(...data: (string | number)[]) {
@@ -136,6 +140,15 @@ function logWarn(data: unknown) {
   Events.send({ type: LogEventTypes.WARN, message: JSON.stringify(data) });
 }
 
-const logger = { warn: logWarn, info: logInfo, infoB: logInfoB, error: logError, log, write, metrics: logMetrics, dir };
+const logger = {
+  warn: logWarn,
+  info: logInfo,
+  infoB: logInfoB,
+  error: logError,
+  log,
+  write,
+  metrics: logMetrics,
+  dir,
+};
 
 export { logger };

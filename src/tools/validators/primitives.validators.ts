@@ -1,6 +1,5 @@
-import { path } from 'lodash/fp';
-
-import { AnyValue } from '../../types';
+import { path } from 'ramda';
+import type { AnyValue } from '../../types';
 
 export const isStr = (v: unknown) => typeof v === 'string';
 

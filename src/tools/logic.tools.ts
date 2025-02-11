@@ -1,6 +1,5 @@
-import { isEmpty, isNil } from 'lodash';
-
-import { Fn } from '../types';
+import { isEmpty, isNil } from 'ramda';
+import type { Fn } from '../types';
 import { as } from './type.tools';
 
 export const isNilOrEmpty = (data: unknown): boolean => isNil(data) || isEmpty(data);
