@@ -1,6 +1,6 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "8.2.0",
+  "version": "8.3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
