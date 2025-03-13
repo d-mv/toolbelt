@@ -1,67 +1,74 @@
-import { parseFl } from '../number.tools';
-import { isStr, isNum } from '../validators';
+import { parseFl } from "../number.tools";
+import { isNum, isStr } from "../validators";
 
 // 1,234,567.00
-export const toFin = new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 2 }).format;
+export const toFin = new Intl.NumberFormat("en-US", {
+	style: "decimal",
+	minimumFractionDigits: 2,
+}).format;
 
-export function formatNum(options?: Partial<Intl.NumberFormatOptions & { suffix: string }>) {
-  const format = Intl.NumberFormat('en-US', {
-    useGrouping: true,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-    ...options,
-  }).format;
+export function formatNum(
+	options?: Partial<Intl.NumberFormatOptions & { suffix: string }>,
+) {
+	const format = Intl.NumberFormat("en-US", {
+		useGrouping: true,
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+		...options,
+	}).format;
 
-  return function formatter(target: string | number): string {
-    if (target === 0 || target === '0') return format(0.0);
+	return function formatter(target: string | number): string {
+		if (target === 0 || target === "0") return format(0.0);
 
-    const isString = isStr(target);
+		const isString = isStr(target);
 
-    const isNumber = isNum(target);
+		const isNumber = isNum(target);
 
-    if ((!isString && !isNumber) || (isNumber && isNaN(target as number))) return format(0.0);
+		if ((!isString && !isNumber) || (isNumber && isNaN(target as number)))
+			return format(0.0);
 
-    let value: number = (target as number) ?? 0;
+		let value: number = (target as number) ?? 0;
 
-    if (isString) {
-      const result = parseFl(value);
+		if (isString) {
+			const result = parseFl(value);
 
-      if (result.isErr()) return format(0.0);
+			if (result.isErr) return format(0.0);
 
-      value = result.unwrap();
-    }
+			value = result.unwrap();
+		}
 
-    return format(value) + (options?.suffix || '');
-  };
+		return format(value) + (options?.suffix || "");
+	};
 }
 
 export function asCurrency(options?: Partial<Intl.NumberFormatOptions>) {
-  const format = Intl.NumberFormat('en-US', {
-    style: 'currency',
-    useGrouping: true,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-    currency: 'USD',
-    ...options,
-  }).format;
+	const format = Intl.NumberFormat("en-US", {
+		style: "currency",
+		useGrouping: true,
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+		currency: "USD",
+		...options,
+	}).format;
 
-  return function formatter(target: number | string): string {
-    const isNumber = isNum(target);
+	return function formatter(target: number | string): string {
+		const isNumber = isNum(target);
 
-    const isString = isStr(target);
+		const isString = isStr(target);
 
-    if ((!isNumber && !isString) || (isNumber && isNaN(target as number))) return '';
+		if ((!isNumber && !isString) || (isNumber && isNaN(target as number)))
+			return "";
 
-    let value = target as number;
+		let value = target as number;
 
-    if (isString) {
-      const result = parseFl(value);
+		if (isString) {
+			const result = parseFl(value);
 
-      if (result.isErr()) return '';
+			if (result.isErr) return "";
 
-      value = result.unwrap();
-    }
+			value = result.unwrap();
+		}
 
-    return format(value);
-  };
+		return format(value);
+	};
 }

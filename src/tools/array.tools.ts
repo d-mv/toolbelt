@@ -1,13 +1,13 @@
 export function randomItemsFromArray<T>(arr: T[], qty: number): T[] {
-  const result: T[] = [];
+	const result: T[] = [];
 
-  for (let i = 0; i < qty; i++) {
-    const idx = Math.floor(Math.random() * arr.length);
+	for (let i = 0; i < qty; i++) {
+		const idx = Math.floor(Math.random() * arr.length);
 
-    result.push(arr[idx] as T);
-  }
+		result.push(arr[idx] as T);
+	}
 
-  return result;
+	return result;
 }
 
 /**
@@ -17,13 +17,13 @@ export function randomItemsFromArray<T>(arr: T[], qty: number): T[] {
  * @returns array with the results of calling a provided function
  */
 export function buildArrayWith<T>(length: number, fn: () => T): T[] {
-  const result: T[] = [];
+	const result: T[] = [];
 
-  for (let i = 0; i < length; i++) {
-    result.push(fn());
-  }
+	for (let i = 0; i < length; i++) {
+		result.push(fn());
+	}
 
-  return result;
+	return result;
 }
 
 /**
@@ -34,5 +34,5 @@ export function buildArrayWith<T>(length: number, fn: () => T): T[] {
  * @returns array with the element added between each element of the original array
  */
 export function interleave<T>(arr: T[], el: T) {
-  return ([] as T[]).concat(...arr.map(n => [n, el])).slice(0, -1);
+	return ([] as T[]).concat(...arr.map((n) => [n, el])).slice(0, -1);
 }

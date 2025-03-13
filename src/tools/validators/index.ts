@@ -1,3 +1,3 @@
-export * from './primitives.validators';
+export * from "./primitives.validators";
 
-export * from './string.validators';
+export * from "./string.validators";

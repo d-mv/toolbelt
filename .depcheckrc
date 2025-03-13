@@ -1,2 +1,2 @@
-ignores: ["eslint", "husky","webpack-cli","@types/jest"]
+ignores: ["husky", "@types/jest"]
 skip-missing: true
