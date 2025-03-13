@@ -1,4 +1,4 @@
-export function generateShortUUID() {
+export function getId() {
 	// Generate a standard UUID
 	const uuid = crypto.randomUUID();
 
