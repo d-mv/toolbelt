@@ -84,13 +84,13 @@ function checkIfUnSafe(options?: Partial<ConfigToSafeOptions>) {
  * // }
  */
 
-export function safeObject(
-	obj: unknown,
+export function safeObject<T>(
+	obj: T,
 	options?: Partial<ConfigToSafeOptions>,
-): Record<string, unknown> {
+): T | Record<string, unknown> {
 	const result = {} as Record<string, unknown>;
 
-	if (!obj || !isObject(obj) || isEmpty(obj)) return result;
+	if (!obj || !isObject(obj) || isEmpty(obj)) return obj;
 
 	const delimeter = options?.delimiter || "_";
 
