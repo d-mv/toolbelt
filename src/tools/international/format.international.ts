@@ -32,7 +32,7 @@ export function formatNum(
 		if (isString) {
 			const result = parseFl(value);
 
-			if (result.isErr) return format(0.0);
+			if (result.isErr()) return format(0.0);
 
 			value = result.unwrap();
 		}
@@ -64,7 +64,7 @@ export function asCurrency(options?: Partial<Intl.NumberFormatOptions>) {
 		if (isString) {
 			const result = parseFl(value);
 
-			if (result.isErr) return "";
+			if (result.isErr()) return "";
 
 			value = result.unwrap();
 		}
