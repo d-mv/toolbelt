@@ -1,6 +1,6 @@
 {
   "name": "@mv-d/toolbelt",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -12,8 +12,7 @@
   ],
   "scripts": {
     "lint": "biome check --write src",
-    "test:ci": "CI=true NODE_ENV=test TZ='UTC' jest --config ./jest.config.js --passWithNoTests",
-    "test": "run-p test:typescript test:dependencies test:ci",
+    "test": "run-p test:typescript test:dependencies",
     "test:dependencies": "npx depcheck",
     "test:complete": "npm run test:typescript && npm run test && npm run test:dependencies",
     "test:typescript": "tsc --noEmit -p ./tsconfig.json",
@@ -23,24 +22,20 @@
     "dev": "NODE_ENV=development ts-node-dev src/client.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dmitry Melnikov <d.dash.mv@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/jest": "29.5.14",
-    "@types/node": "^22.13.10",
+    "@biomejs/biome": "2.2.4",
     "depcheck": "1.4.7",
     "husky": "9.1.7",
-    "jest": "29.7.0",
-    "jest-watch-typeahead": "2.2.2",
     "npm-run-all": "4.1.5",
-    "ts-jest": "29.2.6",
     "ts-node-dev": "2.0.0",
-    "typescript": "5.8.2"
+    "typescript": "5.9.2"
   },
   "dependencies": {
-    "@types/ramda": "0.30.2",
-    "ramda": "0.30.1",
+    "@types/node": "24.5.2",
+    "@types/ramda": "0.31.1",
+    "ramda": "0.31.3",
     "tiny-case": "1.0.3"
   },
   "bugs": {
@@ -48,5 +43,5 @@
   },
   "homepage": "https://github.com/d-mv/toolbelt#readme",
   "description": "",
-  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
+  "packageManager": "pnpm@10.17.1"
 }
